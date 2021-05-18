@@ -15,6 +15,7 @@
 [1-9][0-9]+				      {yylval.integer = atoi(yytext); return INT;}
 ['ch']+                 {yylval.name = yytext; return STRING;} //******* 
 [+-*/]                  {yylval.character = yytext[0]; return binop;} //*******
+[%]                     {yylval.character = yytext[0]; return COMMENT}
 [ \t\n]					;
 .					              {printf("unexpected character\n");}
 

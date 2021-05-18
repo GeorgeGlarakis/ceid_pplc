@@ -17,7 +17,8 @@
 %token <name> ID 
 %token <integer> INT
 %token <character> CHAR 
-%token <name> STRING  
+%token <name> STRING
+%token <character> COMMENT  
 
 //******* 
 %type <name> prog dcl func_dcl var_decl type parm_types func main_func mult_stmt stmt assg mult_expr expr binop relop logical_op
@@ -121,9 +122,9 @@ expr	: '–' expr
  	| '(' expr ')'                  
  	| INT                        
  	| CHAR                       
- 	| STRING                     
+ 	| STRING
+        %token <character> COMMENT                     
        ;
-
 
 binop	: +
  	| –
@@ -140,8 +141,11 @@ relop	: ==
         ;
 
 logical_op : &&
- 	   | ||
-        ;
+ 	    | ||
+           ;
+
+com    : COMMENT STRING '\n'
+       ;
 
 %%
 
