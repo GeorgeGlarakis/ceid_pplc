@@ -95,7 +95,7 @@ stmt	: IF expr THEN stmt ENDIF
     | IF expr THEN stmt ELSEIF stmt ENDIF
     | IF expr THEN stmt ELSEIF stmt ELSE stmt ENDIF
 
- 	| while LEFTPAR expr RIGHTPAR stmt 
+ 	| WHILE LEFTPAR expr RIGHTPAR stmt ENDWHILE 
 
     | FOR assg TO INT STEP INT stmt ENDFOR
     
