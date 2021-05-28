@@ -14,6 +14,8 @@ extern int yylineno;
 }
 %start
 %token PROGRAM FUNCTION VARS CHAR INTEGER END_FUNCTION RETURN STARTMAIN ENDMAIN
+%token IF THEN ENDIF ELSEIF ELSE FOR TO STEP ENDFOR WHILE ENDWHILE SWITCH CASE DEFAULT END SWITCH 
+%token PRINT BREAK   
 %token <name> ID 
 %token <integer> INT
 %token <character> CHARACTER 
@@ -54,12 +56,14 @@ dcl	: type var_decl
      | dcl ',' ID '(' parm_types ')'
      ;
 
-func_dcl : type var_decl 
+func_dcl : VARS type var_decl 
          | dcl ',' var_decl 
          ;
 
 var_decl : ID                           
          | ID '[' INT ']'
+         | var_decl ',' ID
+         | var_decl ',' ID '[' INT ']'
          ;
 
 type  : CHAR
@@ -73,6 +77,7 @@ parm_types : void
            | parm_types ',' type ID '[' ']'
            ;         
 
+// υποχρεωτική προσθήκη RETURN πριν τη λήξη της συνάρτησης
 func  : FUNCTION ID '(' parm_types ')' '\n'  func_dcl mult_stmt END_FUNCTION 
  	;
 
@@ -88,7 +93,7 @@ mult_stmt : stmt
 
 stmt	: if '(' expr ')' stmt                          
       | if '(' expr ')' stmt else stmt 
- 	| while '(' expr ')' stmt
+ 	| while '(' expr ')' stmt 
  	| for '(' ';' ';' ')' stmt
       | for '(' ';' ';' assg ')' stmt
       | for '(' ';' expr ';' ')' stmt
