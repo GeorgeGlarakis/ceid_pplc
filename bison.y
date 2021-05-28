@@ -91,8 +91,10 @@ mult_stmt : stmt
           | ''                  
           ;
 
-stmt	: if LEFTPAR expr RIGHTPAR stmt                          
-      | if LEFTPAR expr RIGHTPAR stmt else stmt 
+stmt	: IF expr THEN stmt ENDIF
+    | IF expr THEN stmt ELSEIF stmt ENDIF
+    | IF expr THEN stmt ELSEIF stmt ELSE stmt ENDIF
+
  	| while LEFTPAR expr RIGHTPAR stmt 
 
     | FOR assg TO INT STEP INT stmt ENDFOR
