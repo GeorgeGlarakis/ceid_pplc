@@ -14,9 +14,8 @@ extern int yylineno;
 }
 %start
 %token PROGRAM FUNCTION VARS CHAR INTEGER END_FUNCTION RETURN STARTMAIN ENDMAIN
-%token IF THEN ENDIF ELSEIF ELSE FOR TO STEP ENDFOR WHILE ENDWHILE SWITCH CASE DEFAULT END SWITCH 
-%token PRINT BREAK 
-%token STRUCT ENDSTRUCT TYPEDEF 
+%token IF THEN ENDIF ELSEIF ELSE FOR TO STEP ENDFOR WHILE ENDWHILE SWITCH CASE DEFAULT ENDSWITCH 
+%token PRINT BREAK STRUCT ENDSTRUCT TYPEDEF 
 %token <name> ID 
 %token <integer> INT
 %token <character> CHARACTER 
@@ -162,21 +161,21 @@ int main(int argc, char *argv[]){
             return 1;
         }
     } 
-//     else {
-//            printf ("Parsing from terminal input:\n");
-//            parser_return_value = yyparse();
-//     }
-//     if (parser_return_value==0) {
-//         printf("Parsing complete. No errors found!\n\n");
-//         printf("===================================\n");
-//     } 
-//     else if (parser_return_value==2) {
-//         printf("\nParsing failed due to memory exhaustion.\n\n");
-//         printf("===================================\n");
-//     }
-//     else {
-//         printf("\n\nParsing failed.\n\n");
-//         printf("===================================\n");
-//     }
+    else {
+           printf ("Parsing from terminal input:\n");
+           parser_return_value = yyparse();
+    }
+    if (parser_return_value==0) {
+        printf("Parsing complete. No errors found!\n\n");
+        printf("===================================\n");
+    } 
+    else if (parser_return_value==2) {
+        printf("\nParsing failed due to memory exhaustion.\n\n");
+        printf("===================================\n");
+    }
+    else {
+        printf("\n\nParsing failed.\n\n");
+        printf("===================================\n");
+    }
     return 0;
 }
