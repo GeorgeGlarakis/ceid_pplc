@@ -25,7 +25,7 @@ extern int yylineno;
 %token <name> RELOP
 %token <name> LOGICALOP  
 
-%token LEFTCURL RIGHTCURL LEFTBRA RIGHTBRA LEFTPAR RIGHTPAR COMMA SEMICOLON ASSIGN NEWLINE
+%token LEFTCURL RIGHTCURL LEFTBRA RIGHTBRA LEFTPAR RIGHTPAR COMMA SEMICOLON ASSIGN NEWLINE NEG NOT
 
 //******* 
 %type <name> prog dcl func_dcl var_decl type parm_types func main_func mult_stmt stmt assg mult_expr expr com
@@ -40,30 +40,30 @@ extern int yylineno;
 
 %%
 
-prog	: PROGRAM ID '\n'
-      | dcl ';'               
+prog	: PROGRAM ID NEWLINE
+      | dcl SEMICOLON               
       | func                  
-      | prog dcl ';'
+      | prog dcl SEMICOLON
       | prog func
       ;
 
 dcl	: type var_decl 
-     | dcl ',' var_decl 
- 	| extern type ID '(' parm_types ')'         
-     | type ID '(' parm_types ')' 
- 	| extern void ID '(' parm_types ')' 
-     | void ID '(' parm_types ')' 
-     | dcl ',' ID '(' parm_types ')'
+     | dcl COMMA var_decl 
+ 	| extern type ID LEFTPAR parm_types RIGHTPAR         
+     | type ID LEFTPAR parm_types RIGHTPAR 
+ 	| extern void ID LEFTPAR parm_types RIGHTPAR 
+     | void ID LEFTPAR parm_types RIGHTPAR 
+     | dcl COMMA ID LEFTPAR parm_types RIGHTPAR
      ;
 
 func_dcl : VARS type var_decl 
-         | dcl ',' var_decl 
+         | dcl COMMA var_decl 
          ;
 
 var_decl : ID                           
-         | ID '[' INT ']'
-         | var_decl ',' ID
-         | var_decl ',' ID '[' INT ']'
+         | ID LEFTBRA INT RIGHTBRA
+         | var_decl COMMA ID
+         | var_decl COMMA ID LEFTBRA INT RIGHTBRA
          ;
 
 type  : CHAR
@@ -72,16 +72,16 @@ type  : CHAR
 
 parm_types : void
  	     | type ID 
-           | type ID '[' ']'  
-           | parm_types ',' type ID 
-           | parm_types ',' type ID '[' ']'
+           | type ID LEFTBRA RIGHTBRA  
+           | parm_types COMMA type ID 
+           | parm_types COMMA type ID LEFTBRA RIGHTBRA
            ;         
 
 // υποχρεωτική προσθήκη RETURN πριν τη λήξη της συνάρτησης
-func  : FUNCTION ID '(' parm_types ')' '\n'  func_dcl mult_stmt END_FUNCTION 
+func  : FUNCTION ID LEFTPAR parm_types RIGHTPAR NEWLINE  func_dcl mult_stmt END_FUNCTION 
  	;
 
-main_func  : STARTMAIN '(' parm_types ')' '\n'  func_dcl mult_stmt ENDMAIN 
+main_func  : STARTMAIN LEFTPAR parm_types RIGHTPAR NEWLINE  func_dcl mult_stmt ENDMAIN 
  	     ;      
 
 mult_stmt : stmt
@@ -91,50 +91,50 @@ mult_stmt : stmt
           | ''                  
           ;
 
-stmt	: if '(' expr ')' stmt                          
-      | if '(' expr ')' stmt else stmt 
- 	| while '(' expr ')' stmt 
- 	| for '(' ';' ';' ')' stmt
-      | for '(' ';' ';' assg ')' stmt
-      | for '(' ';' expr ';' ')' stmt
-      | for '(' ';' expr ';' assg ')' stmt
-      | for '(' assg ';' ';' ')' stmt
-      | for '(' assg ';' ';' assg ')' stmt
-      | for '(' assg ';' expr ';' ')' stmt
-      | for '(' assg ';' expr ';' assg ')' stmt
- 	| RETURN expr ';'
-      | RETURN ';'
- 	| assg ';'
- 	| ID '(' mult_expr ')' ';'
- 	| '{' stmt '}'
-      | '{' '}'
- 	| ';'                                           
+stmt	: if LEFTPAR expr RIGHTPAR stmt                          
+      | if LEFTPAR expr RIGHTPAR stmt else stmt 
+ 	| while LEFTPAR expr RIGHTPAR stmt 
+ 	| for LEFTPAR SEMICOLON SEMICOLON RIGHTPAR stmt
+      | for LEFTPAR SEMICOLON SEMICOLON assg RIGHTPAR stmt
+      | for LEFTPAR SEMICOLON expr SEMICOLON RIGHTPAR stmt
+      | for LEFTPAR SEMICOLON expr SEMICOLON assg RIGHTPAR stmt
+      | for LEFTPAR assg SEMICOLON SEMICOLON RIGHTPAR stmt
+      | for LEFTPAR assg SEMICOLON SEMICOLON assg RIGHTPAR stmt
+      | for LEFTPAR assg SEMICOLON expr SEMICOLON RIGHTPAR stmt
+      | for LEFTPAR assg SEMICOLON expr SEMICOLON assg RIGHTPAR stmt
+ 	| RETURN expr SEMICOLON
+      | RETURN SEMICOLON
+ 	| assg SEMICOLON
+ 	| ID LEFTPAR mult_expr RIGHTPAR SEMICOLON
+ 	| LEFTCURL stmt RIGHTCURL
+      | LEFTCURL RIGHTCURL
+ 	| SEMICOLON                                           
       ;
 
 
-assg	: ID '=' expr                             
-      | ID '[' expr ']' '=' expr                
+assg	: ID ASSIGN expr                             
+      | ID LEFTBRA expr RIGHTBRA ASSIGN expr                
       ;
 
 mult_expr : expr                        
-          | mult_expr ',' expr
+          | mult_expr COMMA expr
           | ''
           ;
 
-expr	: '–' expr                      
- 	| '!' expr                      
+expr	: NEG expr                      
+ 	| NOT expr                      
  	| expr BINOP expr
  	| expr RELOP expr
  	| expr LOGICALOP expr
  	| ID                            
-      | ID '(' mult_expr ')' 
-      | ID '[' expr ']'
- 	| '(' expr ')'                  
+      | ID LEFTPAR mult_expr RIGHTPAR 
+      | ID LEFTBRA expr RIGHTBRA
+ 	| LEFTPAR expr RIGHTPAR                  
  	| INT                        
  	| CHARACTER                                           
       ;
 
-com   : COMMENT STRING '\n'
+com   : COMMENT STRING NEWLINE
       ;
 
 %%

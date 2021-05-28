@@ -22,6 +22,29 @@
 ["RETURN"]                        {yylval.name = yytext; return RETURN;}
 ["STARTMAIN"]                     {yylval.name = yytext; return STARTMAIN;}
 ["ENDMAIN"]                       {yylval.name = yytext; return ENDMAIN;}
+["IF"]                            {yylval.name = yytext; return IF;}
+["THEN"]                          {yylval.name = yytext; return THEN;}
+["ENDIF"]                         {yylval.name = yytext; return ENDIF;}
+["ELSEIF"]                        {yylval.name = yytext; return ELSEIF;}
+["ELSE"]                          {yylval.name = yytext; return ELSE;}
+["FOR"]                           {yylval.name = yytext; return FOR;}
+["TO"]                            {yylval.name = yytext; return TO;}
+["STEP"]                          {yylval.name = yytext; return STEP;}
+["ENDFOR"]                        {yylval.name = yytext; return ENDFOR;}
+["WHILE"]                         {yylval.name = yytext; return WHILE;}
+["ENDWHILE"]                      {yylval.name = yytext; return ENDWHILE;}
+["SWITCH"]                        {yylval.name = yytext; return SWITCH;}
+["CASE"]                          {yylval.name = yytext; return CASE;}
+["DEFAULT"]                       {yylval.name = yytext; return DEFAULT;}
+["ENDSWITCH"]                     {yylval.name = yytext; return ENDSWITCH;}
+["PRINT"]                         {yylval.name = yytext; return PRINT;}
+["BREAK"]                         {yylval.name = yytext; return BREAK;}
+["STRUCT"]                        {yylval.name = yytext; return STRUCT;}
+["ENDSTRUCT"]                     {yylval.name = yytext; return ENDSTRUCT;}
+["TYPEDEF"]                       {yylval.name = yytext; return TYPEDEF;}
+
+
+
 
 [{]                             {return LEFTCURL}
 [}]                             {return RIGHTCURL}
