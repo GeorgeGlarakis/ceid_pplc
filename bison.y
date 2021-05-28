@@ -91,13 +91,14 @@ mult_stmt : stmt
           | ''                  
           ;
 
-stmt	: IF expr THEN stmt ENDIF
-    | IF expr THEN stmt ELSEIF stmt ENDIF
-    | IF expr THEN stmt ELSEIF stmt ELSE stmt ENDIF
+stmt	: IF LEFTPAR expr RIGHTPAR THEN stmt ENDIF
+    | IF LEFTPAR expr RIGHTPAR THEN stmt ELSEIF stmt ENDIF
+    | IF LEFTPAR expr RIGHTPAR THEN stmt ELSEIF stmt ELSE stmt ENDIF
 
  	| WHILE LEFTPAR expr RIGHTPAR stmt ENDWHILE 
 
     | FOR assg TO INT STEP INT stmt ENDFOR
+    
     
  	| RETURN expr SEMICOLON
       | RETURN SEMICOLON
