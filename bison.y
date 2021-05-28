@@ -40,23 +40,24 @@ extern int yylineno;
 
 %%
 
-prog	: PROGRAM ID NEWLINE
-      | dcl SEMICOLON               
-      | func                  
-      | prog dcl SEMICOLON
+prog  : PROGRAM ID NEWLINE
+    //   | dcl SEMICOLON               
+    //   | func                  
+    //   | prog dcl SEMICOLON
       | prog func
+      | prog main_func
       ;
 
 dcl	: type var_decl 
-     | dcl COMMA var_decl 
- 	| extern type ID LEFTPAR parm_types RIGHTPAR         
-     | type ID LEFTPAR parm_types RIGHTPAR 
- 	| extern void ID LEFTPAR parm_types RIGHTPAR 
-     | void ID LEFTPAR parm_types RIGHTPAR 
-     | dcl COMMA ID LEFTPAR parm_types RIGHTPAR
+    //  | dcl COMMA var_decl 
+ 	//  | extern type ID LEFTPAR parm_types RIGHTPAR         
+    //  | type ID LEFTPAR parm_types RIGHTPAR 
+ 	//  | extern void ID LEFTPAR parm_types RIGHTPAR 
+    //  | void ID LEFTPAR parm_types RIGHTPAR 
+    //  | dcl COMMA ID LEFTPAR parm_types RIGHTPAR
      ;
 
-func_dcl : VARS type var_decl 
+func_dcl : VARS type var_decl SEMICOLON
          | dcl COMMA var_decl 
          ;
 
@@ -95,7 +96,7 @@ stmt	: if LEFTPAR expr RIGHTPAR stmt
       | if LEFTPAR expr RIGHTPAR stmt else stmt 
  	| while LEFTPAR expr RIGHTPAR stmt 
 
-    | FOR assg TO INT STEP INT stmt ENDFOR
+    | FOR assg TO INT STEP INT NEWLINE mult_stmt NEWLINE ENDFOR
     
  	| RETURN expr SEMICOLON
       | RETURN SEMICOLON
