@@ -94,14 +94,9 @@ mult_stmt : stmt
 stmt	: if LEFTPAR expr RIGHTPAR stmt                          
       | if LEFTPAR expr RIGHTPAR stmt else stmt 
  	| while LEFTPAR expr RIGHTPAR stmt 
- 	| for LEFTPAR SEMICOLON SEMICOLON RIGHTPAR stmt
-      | for LEFTPAR SEMICOLON SEMICOLON assg RIGHTPAR stmt
-      | for LEFTPAR SEMICOLON expr SEMICOLON RIGHTPAR stmt
-      | for LEFTPAR SEMICOLON expr SEMICOLON assg RIGHTPAR stmt
-      | for LEFTPAR assg SEMICOLON SEMICOLON RIGHTPAR stmt
-      | for LEFTPAR assg SEMICOLON SEMICOLON assg RIGHTPAR stmt
-      | for LEFTPAR assg SEMICOLON expr SEMICOLON RIGHTPAR stmt
-      | for LEFTPAR assg SEMICOLON expr SEMICOLON assg RIGHTPAR stmt
+
+    | FOR assg TO INT STEP INT stmt ENDFOR
+    
  	| RETURN expr SEMICOLON
       | RETURN SEMICOLON
  	| assg SEMICOLON
