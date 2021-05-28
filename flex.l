@@ -55,7 +55,10 @@
 [,]                             {return COMMA}
 [;]                             {return SEMICOLON}
 [=]                             {return ASSIGN}
+["]                             {return QUOTES}
 [\n]                            {return NEWLINE}
+['/*']                          {return STARTCOM}
+['*/']                          {return ENDCOM}
 
 
 
@@ -66,7 +69,7 @@
 ['=='|'!='|'<='|'>='|'<'|'>']   {yylval.name = yytext; return RELOP;}
 ['&&'|'||']                     {yylval.name = yytext; return LOGICALOP;}
 [%]                             {yylval.character = yytext[0]; return COMMENT}
-// ['ch']+                         {yylval.name = yytext; return STRING;} 
+['ch']+                         {yylval.name = yytext; return STRING;} 
 
 .					                      {printf("unexpected character\n");}
 

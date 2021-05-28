@@ -15,7 +15,7 @@ extern int yylineno;
 %start
 %token PROGRAM FUNCTION VARS CHAR INTEGER END_FUNCTION RETURN STARTMAIN ENDMAIN
 %token IF THEN ENDIF ELSEIF ELSE FOR TO STEP ENDFOR WHILE ENDWHILE SWITCH CASE DEFAULT ENDSWITCH 
-%token PRINT BREAK STRUCT ENDSTRUCT TYPEDEF 
+%token PRINT BREAK STRUCT ENDSTRUCT TYPEDEF QUOTES STARTCOM ENDCOM
 %token <name> ID 
 %token <integer> INT
 %token <character> CHARACTER 
@@ -100,21 +100,22 @@ stmt	: IF LEFTPAR expr RIGHTPAR THEN stmt ENDIF
 
     | FOR assg TO INT STEP INT NEWLINE mult_stmt NEWLINE ENDFOR
     
-    | SWITCH LEFTPAR stmt RIGHTPAR sw_case DEFAULT COLON stmt ENDSWITCH
-    | SWITCH LEFTPAR stmt RIGHTPAR sw_case ENDSWITCH
+    | SWITCH LEFTPAR expr RIGHTPAR NEWLINE sw_case DEFAULT COLON mult_stmt ENDSWITCH
+    | SWITCH LEFTPAR expr RIGHTPAR NEWLINE sw_case ENDSWITCH
 
  	| RETURN expr SEMICOLON
-      | RETURN SEMICOLON
+    | RETURN SEMICOLON
+    | BREAK SEMICOLON
  	| assg SEMICOLON
  	| ID LEFTPAR mult_expr RIGHTPAR SEMICOLON
- 	| LEFTCURL stmt RIGHTCURL
-      | LEFTCURL RIGHTCURL
+ 	// | LEFTCURL stmt RIGHTCURL
+    | LEFTCURL RIGHTCURL
  	| SEMICOLON                                           
       ;
 
-sw_case    : CASE LEFTPAR stmt RIGHTPAR COLON sw_case
-    | CASE LEFTPAR stmt RIGHTPAR COLON 
-    ;
+sw_case : CASE LEFTPAR expr RIGHTPAR COLON NEWLINE mult_stmt
+        | sw_case CASE LEFTPAR expr RIGHTPAR COLON NEWLINE mult_stmt
+        ;
 
 assg	: ID ASSIGN expr                             
       | ID LEFTBRA expr RIGHTBRA ASSIGN expr                
@@ -138,8 +139,25 @@ expr	: NEG expr
  	| CHARACTER                                           
       ;
 
-com   : COMMENT STRING NEWLINE
+print_var   : COMMA ID
+            | COMMA ID LEFTBRA INT RIGHTBRA
+            | print_var COMMA ID
+            | print_var COMMA ID LEFTBRA INT RIGHTBRA
+            ;
+
+print : PRINT LEFTPAR QUOTES STRING QUOTES RIGHTPAR SEMICOLON
+      | PRINT LEFTPAR QUOTES STRING QUOTES print_var RIGHTPAR SEMICOLON
       ;
+
+com : COMMENT STRING NEWLINE
+    ;
+
+str : STRING
+    | STRING NEWLINE str
+
+mult_com : STARTCOM STRING ENDCOM
+         | STARTCOM STRING NEWLINE ENDCOM
+         ;
 
 %%
 
