@@ -25,7 +25,7 @@ extern int yylineno;
 %token <name> RELOP
 %token <name> LOGICALOP  
 
-%token LEFTCURL RIGHTCURL LEFTBRA RIGHTBRA LEFTPAR RIGHTPAR COMMA SEMICOLON ASSIGN NEWLINE NEG NOT
+%token LEFTCURL RIGHTCURL LEFTBRA RIGHTBRA LEFTPAR RIGHTPAR COMMA SEMICOLON COLON ASSIGN NEWLINE NEG NOT
 
 //******* 
 %type <name> prog dcl func_dcl var_decl type parm_types func main_func mult_stmt stmt assg mult_expr expr com
@@ -92,12 +92,17 @@ mult_stmt : stmt
           | ''                  
           ;
 
-stmt	: if LEFTPAR expr RIGHTPAR stmt                          
-      | if LEFTPAR expr RIGHTPAR stmt else stmt 
- 	| while LEFTPAR expr RIGHTPAR stmt 
+stmt	: IF LEFTPAR expr RIGHTPAR THEN stmt ENDIF
+    | IF LEFTPAR expr RIGHTPAR THEN stmt ELSEIF stmt ENDIF
+    | IF LEFTPAR expr RIGHTPAR THEN stmt ELSEIF stmt ELSE stmt ENDIF
+
+ 	| WHILE LEFTPAR expr RIGHTPAR stmt ENDWHILE 
 
     | FOR assg TO INT STEP INT NEWLINE mult_stmt NEWLINE ENDFOR
     
+    | SWITCH LEFTPAR stmt RIGHTPAR sw_case DEFAULT COLON stmt ENDSWITCH
+    | SWITCH LEFTPAR stmt RIGHTPAR sw_case ENDSWITCH
+
  	| RETURN expr SEMICOLON
       | RETURN SEMICOLON
  	| assg SEMICOLON
@@ -107,6 +112,9 @@ stmt	: if LEFTPAR expr RIGHTPAR stmt
  	| SEMICOLON                                           
       ;
 
+sw_case    : CASE LEFTPAR stmt RIGHTPAR COLON sw_case
+    | CASE LEFTPAR stmt RIGHTPAR COLON 
+    ;
 
 assg	: ID ASSIGN expr                             
       | ID LEFTBRA expr RIGHTBRA ASSIGN expr                
