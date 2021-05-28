@@ -93,8 +93,8 @@ mult_stmt : stmt
           ;
 
 stmt	: IF LEFTPAR expr RIGHTPAR THEN stmt ENDIF
-    | IF LEFTPAR expr RIGHTPAR THEN stmt ELSEIF stmt ENDIF
-    | IF LEFTPAR expr RIGHTPAR THEN stmt ELSEIF stmt ELSE stmt ENDIF
+    | IF LEFTPAR expr RIGHTPAR THEN stmt if_elseif ENDIF
+    | IF LEFTPAR expr RIGHTPAR THEN stmt if_elseif ELSE stmt ENDIF
 
  	| WHILE LEFTPAR expr RIGHTPAR stmt ENDWHILE 
 
@@ -111,6 +111,10 @@ stmt	: IF LEFTPAR expr RIGHTPAR THEN stmt ENDIF
       | LEFTCURL RIGHTCURL
  	| SEMICOLON                                           
       ;
+
+if_elseif   : ELSEIF stmt if_elseif
+    | ELSEIF stmt
+    ;
 
 sw_case    : CASE LEFTPAR stmt RIGHTPAR COLON sw_case
     | CASE LEFTPAR stmt RIGHTPAR COLON 
