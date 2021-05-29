@@ -54,6 +54,7 @@
 [)]                             {return RIGHTPAR}
 [,]                             {return COMMA}
 [;]                             {return SEMICOLON}
+[:]                             {return COLON}
 [=]                             {return ASSIGN}
 ["]                             {return QUOTES}
 [\n]                            {return NEWLINE}

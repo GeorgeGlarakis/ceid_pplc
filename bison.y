@@ -92,16 +92,16 @@ mult_stmt : stmt
           | ''                  
           ;
 
-stmt	: IF LEFTPAR expr RIGHTPAR THEN stmt ENDIF
-    | IF LEFTPAR expr RIGHTPAR THEN stmt ELSEIF stmt ENDIF
-    | IF LEFTPAR expr RIGHTPAR THEN stmt ELSEIF stmt ELSE stmt ENDIF
+stmt	: IF LEFTPAR expr RIGHTPAR THEN NEWLINE mult_stmt NEWLINE ENDIF
+    | IF LEFTPAR expr RIGHTPAR THEN NEWLINE mult_stmt multi_elseif NEWLINE ENDIF
+    | IF LEFTPAR expr RIGHTPAR THEN NEWLINE mult_stmt else NEWLINE ENDIF
 
- 	| WHILE LEFTPAR expr RIGHTPAR stmt ENDWHILE 
+ 	| WHILE LEFTPAR expr RIGHTPAR NEWLINE mult_stmt NEWLINE ENDWHILE 
 
     | FOR assg TO INT STEP INT NEWLINE mult_stmt NEWLINE ENDFOR
     
-    | SWITCH LEFTPAR expr RIGHTPAR NEWLINE sw_case DEFAULT COLON mult_stmt ENDSWITCH
-    | SWITCH LEFTPAR expr RIGHTPAR NEWLINE sw_case ENDSWITCH
+    | SWITCH LEFTPAR expr RIGHTPAR NEWLINE sw_case NEWLINE DEFAULT COLON NEWLINE mult_stmt NEWLINE ENDSWITCH
+    | SWITCH LEFTPAR expr RIGHTPAR NEWLINE sw_case NEWLINE ENDSWITCH
 
  	| RETURN expr SEMICOLON
     | RETURN SEMICOLON
@@ -117,13 +117,19 @@ sw_case : CASE LEFTPAR expr RIGHTPAR COLON NEWLINE mult_stmt
         | sw_case CASE LEFTPAR expr RIGHTPAR COLON NEWLINE mult_stmt
         ;
 
+multi_elseif   : ELSEIF LEFTPAR expr RIGHTPAR NEWLINE mult_stmt 
+               | multi_elseif ELSEIF LEFTPAR expr RIGHTPAR NEWLINE mult_stmt 
+
+else : ELSE NEWLINE mult_stmt
+     | multi_elseif ELSE NEWLINE mult_stmt
+     ;
+
 assg	: ID ASSIGN expr                             
       | ID LEFTBRA expr RIGHTBRA ASSIGN expr                
       ;
 
 mult_expr : expr                        
           | mult_expr COMMA expr
-          | ''
           ;
 
 expr	: NEG expr                      
