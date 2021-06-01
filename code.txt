@@ -1,4 +1,5 @@
-
+STARTMAIN()
+{
 int i,k;
 char a;
 k=3;
@@ -11,3 +12,5 @@ k=3;
 
 	printf("Iteration: %d \n Number: %d \n", i,k);
 	}
+}
+	
