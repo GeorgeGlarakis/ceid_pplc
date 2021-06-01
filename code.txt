@@ -1,16 +1,17 @@
+PROGRAM
 STARTMAIN()
 {
-int i,k;
-char a;
+INTEGER i,k;
+CHAR a;
 k=3;
-	for(i=0; i<10 i++)
+	FOR(i=0; i<10 i++)
 	{
-		if(k==3){
+		IF(k==3){
 			k++;
 		}
-		else k++;
+		ELSE k++;
 
-	printf("Iteration: %d \n Number: %d \n", i,k);
+	print("Iteration: %d \n Number: %d \n", i,k);
 	}
 }
 	
