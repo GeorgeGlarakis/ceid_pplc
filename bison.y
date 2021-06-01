@@ -8,11 +8,11 @@ extern int yylineno;
 %}
 %union 
 {
-       char name[50000]; //******* 
-       int integer;
-       char character; 
+    char name[50000]; //******* 
+    int integer;
+    char character; 
 }
-%start
+
 %token PROGRAM FUNCTION VARS CHAR INTEGER END_FUNCTION RETURN STARTMAIN ENDMAIN
 %token IF THEN ENDIF ELSEIF ELSE FOR TO STEP ENDFOR WHILE ENDWHILE SWITCH CASE DEFAULT ENDSWITCH 
 %token PRINT BREAK STRUCT ENDSTRUCT TYPEDEF QUOTES STARTCOM ENDCOM
@@ -28,37 +28,34 @@ extern int yylineno;
 %token LEFTCURL RIGHTCURL LEFTBRA RIGHTBRA LEFTPAR RIGHTPAR COMMA SEMICOLON COLON ASSIGN NEWLINE NEG NOT
 
 //******* 
-%type <name> prog dcl func_dcl var_decl type parm_types func main_func mult_stmt stmt assg mult_expr expr com
+// %type <name> prog dcl func_dcl var_decl type parm_types func main_func mult_stmt stmt assg mult_expr expr com
 
-%left '||'
-%left '&&'
-%left '==' '!='
-%left '<' '<=' '>' '>='
-%left '+' '-'
-%left '*' '/'
-%right '!' '-'
+// %left '||'
+// %left '&&'
+// %left '==' '!='
+// %left '<' '<=' '>' '>='
+// %left '+' '-'
+// %left '*' '/'
+// %right '!' '-'
 
 %%
 
 prog  : PROGRAM ID NEWLINE
-    //   | dcl SEMICOLON               
-    //   | func                  
-    //   | prog dcl SEMICOLON
       | prog func
       | prog main_func
       ;
 
-dcl	: type var_decl 
-    //  | dcl COMMA var_decl 
- 	//  | extern type ID LEFTPAR parm_types RIGHTPAR         
-    //  | type ID LEFTPAR parm_types RIGHTPAR 
- 	//  | extern void ID LEFTPAR parm_types RIGHTPAR 
-    //  | void ID LEFTPAR parm_types RIGHTPAR 
-    //  | dcl COMMA ID LEFTPAR parm_types RIGHTPAR
-     ;
+// dcl	: type var_decl 
+//     //  | dcl COMMA var_decl 
+//  	//  | extern type ID LEFTPAR parm_types RIGHTPAR         
+//     //  | type ID LEFTPAR parm_types RIGHTPAR 
+//  	//  | extern void ID LEFTPAR parm_types RIGHTPAR 
+//     //  | void ID LEFTPAR parm_types RIGHTPAR 
+//     //  | dcl COMMA ID LEFTPAR parm_types RIGHTPAR
+//      ;
 
 func_dcl : VARS type var_decl SEMICOLON
-         | dcl COMMA var_decl 
+         | type var_decl COMMA var_decl 
          ;
 
 var_decl : ID                           
@@ -68,11 +65,10 @@ var_decl : ID
          ;
 
 type  : CHAR
- 	| INTEGER
+ 	  | INTEGER
       ;
 
-parm_types : void
- 	     | type ID 
+parm_types : type ID 
            | type ID LEFTBRA RIGHTBRA  
            | parm_types COMMA type ID 
            | parm_types COMMA type ID LEFTBRA RIGHTBRA
@@ -88,8 +84,7 @@ main_func  : STARTMAIN LEFTPAR parm_types RIGHTPAR NEWLINE  func_dcl mult_stmt E
 mult_stmt : stmt
           | com stmt
           | stmt com                
-          | mult_stmt stmt
-          | ''                  
+          | mult_stmt stmt                  
           ;
 
 stmt	: IF LEFTPAR expr RIGHTPAR THEN NEWLINE mult_stmt NEWLINE ENDIF
@@ -108,8 +103,8 @@ stmt	: IF LEFTPAR expr RIGHTPAR THEN NEWLINE mult_stmt NEWLINE ENDIF
     | BREAK SEMICOLON
  	| assg SEMICOLON
  	| ID LEFTPAR mult_expr RIGHTPAR SEMICOLON
- 	// | LEFTCURL stmt RIGHTCURL
-    | LEFTCURL RIGHTCURL
+    | print
+    | com
  	| SEMICOLON                                           
       ;
 
@@ -158,12 +153,13 @@ print : PRINT LEFTPAR QUOTES STRING QUOTES RIGHTPAR SEMICOLON
 com : COMMENT STRING NEWLINE
     ;
 
-str : STRING
-    | STRING NEWLINE str
+// str : STRING
+//     | STRING NEWLINE str
+//     ;
 
-mult_com : STARTCOM STRING ENDCOM
-         | STARTCOM STRING NEWLINE ENDCOM
-         ;
+// mult_com : STARTCOM str ENDCOM
+//          | STARTCOM str NEWLINE ENDCOM
+//          ;
 
 %%
 
@@ -181,7 +177,7 @@ int main(int argc, char *argv[]){
             printf("\nParsing...\n");
             sleep(2);
             printf("\n===================================\n\n");
-            yyin = file_pointer;   // Search about yyin
+            yyin = file_pointer;   
             parser_return_value = yyparse();
         } 
         else {
