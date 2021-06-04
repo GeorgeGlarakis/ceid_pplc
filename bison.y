@@ -13,13 +13,13 @@ void yyerror(const char *msg);
 
 %token PROGRAM FUNCTION VARS CHAR INTEGER END_FUNCTION RETURN STARTMAIN ENDMAIN
 %token IF THEN ENDIF ELSEIF ELSE FOR TO STEP ENDFOR WHILE ENDWHILE SWITCH CASE DEFAULT ENDSWITCH 
-%token PRINT BREAK STRUCT ENDSTRUCT TYPEDEF QUOTES STARTCOM ENDCOM
+%token PRINT BREAK STRUCT ENDSTRUCT TYPEDEF STARTCOM ENDCOM
 %token ID INT CHARACTER STRING COMMENT BINOP RELOP LOGICALOP  
-%token LEFTCURL RIGHTCURL LEFTBRA RIGHTBRA LEFTPAR RIGHTPAR COMMA SEMICOLON COLON ASSIGN NEWLINE NEG NOT
+%token LEFTCURL RIGHTCURL LEFTBRA RIGHTBRA LEFTPAR RIGHTPAR COMMA SEMICOLON COLON ASSIGN NEG NOT
 
 %%
 
-prog  : PROGRAM identifier NEWLINE
+prog  : PROGRAM identifier
       | prog func
       | prog main_func
       ;
@@ -50,28 +50,28 @@ parm_types : type identifier
            ;         
 
 // υποχρεωτική προσθήκη RETURN πριν τη λήξη της συνάρτησης
-func    : FUNCTION identifier LEFTPAR parm_types RIGHTPAR NEWLINE func_dcl mult_stmt NEWLINE END_FUNCTION 
+func    : FUNCTION identifier LEFTPAR parm_types RIGHTPAR func_dcl mult_stmt END_FUNCTION 
  	    ;
 
-main_func   : STARTMAIN LEFTPAR parm_types RIGHTPAR NEWLINE func_dcl NEWLINE mult_stmt NEWLINE ENDMAIN 
+main_func   : STARTMAIN LEFTPAR parm_types RIGHTPAR func_dcl mult_stmt ENDMAIN 
  	        ;      
 
 mult_stmt : stmt
           | com stmt
           | stmt com                
-          | mult_stmt NEWLINE stmt                  
+          | mult_stmt stmt                  
           ;
 
-stmt	: IF LEFTPAR expr RIGHTPAR THEN NEWLINE mult_stmt NEWLINE ENDIF
-        | IF LEFTPAR expr RIGHTPAR THEN NEWLINE mult_stmt multi_elseif NEWLINE ENDIF
-        | IF LEFTPAR expr RIGHTPAR THEN NEWLINE mult_stmt else NEWLINE ENDIF
+stmt	: IF LEFTPAR expr RIGHTPAR THEN mult_stmt ENDIF
+        | IF LEFTPAR expr RIGHTPAR THEN mult_stmt multi_elseif ENDIF
+        | IF LEFTPAR expr RIGHTPAR THEN mult_stmt else ENDIF
 
-        | WHILE LEFTPAR expr RIGHTPAR NEWLINE mult_stmt NEWLINE ENDWHILE 
+        | WHILE LEFTPAR expr RIGHTPAR mult_stmt ENDWHILE 
 
-        | FOR assg TO INT STEP INT NEWLINE mult_stmt NEWLINE ENDFOR
+        | FOR assg TO INT STEP INT mult_stmt ENDFOR
         
-        | SWITCH LEFTPAR expr RIGHTPAR NEWLINE sw_case NEWLINE DEFAULT COLON NEWLINE mult_stmt NEWLINE ENDSWITCH
-        | SWITCH LEFTPAR expr RIGHTPAR NEWLINE sw_case NEWLINE ENDSWITCH
+        | SWITCH LEFTPAR expr RIGHTPAR sw_case DEFAULT COLON mult_stmt ENDSWITCH
+        | SWITCH LEFTPAR expr RIGHTPAR sw_case ENDSWITCH
 
         | RETURN expr SEMICOLON
         | RETURN SEMICOLON
@@ -83,15 +83,15 @@ stmt	: IF LEFTPAR expr RIGHTPAR THEN NEWLINE mult_stmt NEWLINE ENDIF
         | SEMICOLON                                           
         ;
 
-sw_case : CASE LEFTPAR expr RIGHTPAR COLON NEWLINE mult_stmt
-        | sw_case CASE LEFTPAR expr RIGHTPAR COLON NEWLINE mult_stmt
+sw_case : CASE LEFTPAR expr RIGHTPAR COLON mult_stmt
+        | sw_case CASE LEFTPAR expr RIGHTPAR COLON mult_stmt
         ;
 
-multi_elseif   : ELSEIF LEFTPAR expr RIGHTPAR NEWLINE mult_stmt 
-               | multi_elseif ELSEIF LEFTPAR expr RIGHTPAR NEWLINE mult_stmt 
+multi_elseif   : ELSEIF LEFTPAR expr RIGHTPAR mult_stmt 
+               | multi_elseif ELSEIF LEFTPAR expr RIGHTPAR mult_stmt 
 
-else : ELSE NEWLINE mult_stmt
-     | multi_elseif ELSE NEWLINE mult_stmt
+else : ELSE mult_stmt
+     | multi_elseif ELSE mult_stmt
      ;
 
 assg	: identifier ASSIGN expr                             
@@ -102,16 +102,15 @@ mult_expr : expr
           | mult_expr COMMA expr
           ;
 
-expr	: NEG expr                      
-        | NOT expr                      
-        | expr BINOP expr
-        | expr RELOP expr
-        | expr LOGICALOP expr
+expr	: NOT expr            
         | identifier                            
         | identifier LEFTPAR mult_expr RIGHTPAR 
         | identifier LEFTBRA expr RIGHTBRA
         | LEFTPAR expr RIGHTPAR                  
-        | INT                                                                   
+        | INT                     
+        | expr BINOP expr
+        | expr RELOP expr
+        | expr LOGICALOP expr                                              
         ;
 
 print_var   : COMMA identifier
@@ -120,19 +119,19 @@ print_var   : COMMA identifier
             | print_var COMMA identifier LEFTBRA INT RIGHTBRA
             ;
 
-print : PRINT LEFTPAR QUOTES STRING QUOTES RIGHTPAR SEMICOLON
-      | PRINT LEFTPAR QUOTES STRING QUOTES print_var RIGHTPAR SEMICOLON
+print : PRINT LEFTPAR STRING RIGHTPAR SEMICOLON
+      | PRINT LEFTPAR STRING print_var RIGHTPAR SEMICOLON
       ;
 
-com : COMMENT STRING NEWLINE
+com : COMMENT STRING
     ;
 
 // str : STRING
-//     | STRING NEWLINE str
+//     | STRING str
 //     ;
 
 // mult_com : STARTCOM str ENDCOM
-//          | STARTCOM str NEWLINE ENDCOM
+//          | STARTCOM str ENDCOM
 //          ;
 
 %%

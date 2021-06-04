@@ -13,7 +13,7 @@
 
 %%
 
-[ \t]					                  {;}
+[ \t\n]					                  {;}
 "PROGRAM"                       {printf("PROGRAM "); return PROGRAM;}
 "FUNCTION"                      {printf("FUNCTION "); return FUNCTION;}
 "VARS"                          {printf("VARS "); return VARS;}
@@ -54,19 +54,25 @@
 ";"                             {printf("SEMICOLON "); return SEMICOLON;}
 ":"                             {printf("COLON "); return COLON;}
 "="                             {printf("ASSIGN "); return ASSIGN;}
-["]                             {printf("QUOTES "); return QUOTES;}
-\n                              {printf("\n"); return NEWLINE;}
 "/*"                            {printf("STARTCOM "); return STARTCOM;}
 "*/"                            {printf("ENDCOM "); return ENDCOM;}
+"!"                             {printf("NOT "); return NOT;}
 
 [a-zA-Z]                        {printf("CHARACTER "); return CHARACTER;}
 [a-zA-Z][_a-zA-Z0-9]+	          {printf("ID "); return ID;}
-[1-9][0-9]+				              {printf("INT "); return INT;}
-[+|-|*|/]                       {printf("BINOP "); return BINOP;}
-['=='|'!='|'<='|'>='|'<'|'>']   {printf("RELOP "); return RELOP;}
-['&&'|'||']                     {printf("LOGICALOP "); return LOGICALOP;}
+[\-? 0-9]+				              {printf("INT "); return INT;}
+[+|\-|*|/]                      {printf("BINOP "); return BINOP;}
+"=="                            {printf("RELOP "); return RELOP;}
+"!="                            {printf("RELOP "); return RELOP;}
+"<="                            {printf("RELOP "); return RELOP;}
+">="                            {printf("RELOP "); return RELOP;}
+"<"                             {printf("RELOP "); return RELOP;}
+">"                             {printf("RELOP "); return RELOP;}
+"&&"                            {printf("LOGICALOP "); return LOGICALOP;}
+"||"                            {printf("LOGICALOP "); return LOGICALOP;}
 "%"                             {printf("COMMENT "); return COMMENT;}
-['ch']+                         {printf("STRING "); return STRING;} 
+\"([^\n\"\\]*(\\[.\n])*)*\"     {printf("STRING "); return STRING;}
+
 .					                      {printf("Unexpected character\n");}
 
 %%
