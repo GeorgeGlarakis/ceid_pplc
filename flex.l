@@ -13,7 +13,8 @@
 
 %%
 
-[ \t\n]					                  {;}
+[ \t]	  				                {;}
+\n                              {printf("new_line "); return NLINE;}
 "PROGRAM"                       {printf("PROGRAM "); return PROGRAM;}
 "FUNCTION"                      {printf("FUNCTION "); return FUNCTION;}
 "VARS"                          {printf("VARS "); return VARS;}
@@ -73,7 +74,7 @@
 "%"                             {printf("COMMENT "); return COMMENT;}
 \"([^\n\"\\]*(\\[.\n])*)*\"     {printf("STRING "); return STRING;}
 
-.					                      {printf("Unexpected character\n");}
+.                               {printf("\n");}
 
 %%
 

@@ -19,7 +19,7 @@ void yyerror(const char *msg);
 
 %%
 
-prog  : PROGRAM identifier
+prog  : PROGRAM identifier 
       | prog func
       | prog main_func
       | prog strct
