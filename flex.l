@@ -60,8 +60,8 @@
 
 [a-zA-Z]                        {printf("CHARACTER "); return CHARACTER;}
 [a-zA-Z][_a-zA-Z0-9]+	          {printf("ID "); return ID;}
-[\-? 0-9]+				              {printf("INT "); return INT;}
-[+|\-|*|/]                      {printf("BINOP "); return BINOP;}
+[0-9]+				                  {printf("INT "); return INT;}
+[+|\-|*|/|^]                    {printf("BINOP "); return BINOP;}
 "=="                            {printf("RELOP "); return RELOP;}
 "!="                            {printf("RELOP "); return RELOP;}
 "<="                            {printf("RELOP "); return RELOP;}

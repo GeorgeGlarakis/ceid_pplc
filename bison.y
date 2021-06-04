@@ -15,13 +15,15 @@ void yyerror(const char *msg);
 %token IF THEN ENDIF ELSEIF ELSE FOR TO STEP ENDFOR WHILE ENDWHILE SWITCH CASE DEFAULT ENDSWITCH 
 %token PRINT BREAK STRUCT ENDSTRUCT TYPEDEF STARTCOM ENDCOM
 %token ID INT CHARACTER STRING COMMENT BINOP RELOP LOGICALOP  
-%token LEFTCURL RIGHTCURL LEFTBRA RIGHTBRA LEFTPAR RIGHTPAR COMMA SEMICOLON COLON ASSIGN NEG NOT
+%token LEFTCURL RIGHTCURL LEFTBRA RIGHTBRA LEFTPAR RIGHTPAR COMMA SEMICOLON COLON ASSIGN NEG NOT NEWLINE
 
 %%
 
 prog  : PROGRAM identifier
       | prog func
       | prog main_func
+      | prog strct
+      | prog com
       ;
 
 identifier  : ID
@@ -29,7 +31,8 @@ identifier  : ID
             ;
 
 func_dcl : VARS type var_decl SEMICOLON
-         | 
+         | func_dcl VARS type var_decl SEMICOLON 
+         |
          ;
 
 var_decl : identifier                           
@@ -94,6 +97,10 @@ else : ELSE mult_stmt
      | multi_elseif ELSE mult_stmt
      ;
 
+strct : STRUCT identifier func_dcl ENDSTRUCT
+        | TYPEDEF STRUCT identifier func_dcl ENDSTRUCT
+        ;
+
 assg	: identifier ASSIGN expr                             
         | identifier LEFTBRA expr RIGHTBRA ASSIGN expr                
         ;
@@ -126,13 +133,15 @@ print : PRINT LEFTPAR STRING RIGHTPAR SEMICOLON
 com : COMMENT STRING
     ;
 
-// str : STRING
+// TODO:  MULTI COMMENT
+//str : STRING
 //     | STRING str
 //     ;
 
 // mult_com : STARTCOM str ENDCOM
 //          | STARTCOM str ENDCOM
 //          ;
+
 
 %%
 
