@@ -1,5 +1,5 @@
 pplc: lex.yy.c y.tab.c
-	gcc -g lex.yy.c y.tab.c -o pplc
+	gcc -Wall -g lex.yy.c y.tab.c -o pplc
 
 lex.yy.c: y.tab.c flex.l
 	lex flex.l

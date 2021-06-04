@@ -1,0 +1,20 @@
+PROGRAM pplc
+STARTMAIN() 
+VARS INTEGER s,j;
+
+kab = 3 ;
+
+
+	FOR i=0 TO i<10 STEP 1
+	
+		IF(k==3) THEN
+			k = k + 1;
+		ELSE 
+			k = k + 1;
+		ENDIF
+	ENDFOR
+
+	print("Iteration: %d \n Number: %d \n", i,k);
+	
+
+ENDMAIN	

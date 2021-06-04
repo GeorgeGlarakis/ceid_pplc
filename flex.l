@@ -5,73 +5,69 @@
   #include <errno.h>
   #include "y.tab.h"
   extern int yylex();
-  void yyerror(char *s);
 %}
 
 %option yylineno
+%option nounput
+%option noinput
 
 %%
 
-[ \t]					                {;}
-"PROGRAM"                       {return PROGRAM;}
-"FUNCTION"                      {return FUNCTION;}
-"VARS"                          {return VARS;}
-"CHAR"                          {return CHAR;}
-"INTEGER"                       {return INTEGER;}
-"END_FUNCTION"                  {return END_FUNCTION;}
-"RETURN"                        {return RETURN;}
-"STARTMAIN"                     {return STARTMAIN;}
-"ENDMAIN"                       {return ENDMAIN;}
-"IF"                            {return IF;}
-"THEN"                          {return THEN;}
-"ENDIF"                         {return ENDIF;}
-"ELSEIF"                        {return ELSEIF;}
-"ELSE"                          {return ELSE;}
-"FOR"                           {return FOR;}
-"TO"                            {return TO;}
-"STEP"                          {return STEP;}
-"ENDFOR"                        {return ENDFOR;}
-"WHILE"                         {return WHILE;}
-"ENDWHILE"                      {return ENDWHILE;}
-"SWITCH"                        {return SWITCH;}
-"CASE"                          {return CASE;}
-"DEFAULT"                       {return DEFAULT;}
-"ENDSWITCH"                     {return ENDSWITCH;}
-"PRINT"                         {return PRINT;}
-"BREAK"                         {return BREAK;}
-"STRUCT"                        {return STRUCT;}
-"ENDSTRUCT"                     {return ENDSTRUCT;}
-"TYPEDEF"                       {return TYPEDEF;}
+[ \t]					                  {;}
+"PROGRAM"                       {printf("PROGRAM "); return PROGRAM;}
+"FUNCTION"                      {printf("FUNCTION "); return FUNCTION;}
+"VARS"                          {printf("VARS "); return VARS;}
+"CHAR"                          {printf("CHAR "); return CHAR;}
+"INTEGER"                       {printf("INTEGER "); return INTEGER;}
+"END_FUNCTION"                  {printf("END_FUNCTION "); return END_FUNCTION;}
+"RETURN"                        {printf("RETURN "); return RETURN;}
+"STARTMAIN"                     {printf("STARTMAIN "); return STARTMAIN;}
+"ENDMAIN"                       {printf("ENDMAIN "); return ENDMAIN;}
+"IF"                            {printf("IF "); return IF;}
+"THEN"                          {printf("THEN "); return THEN;}
+"ENDIF"                         {printf("ENDIF "); return ENDIF;}
+"ELSEIF"                        {printf("ELSEIF "); return ELSEIF;}
+"ELSE"                          {printf("ELSE "); return ELSE;}
+"FOR"                           {printf("FOR "); return FOR;}
+"TO"                            {printf("TO "); return TO;}
+"STEP"                          {printf("STEP "); return STEP;}
+"ENDFOR"                        {printf("ENDFOR "); return ENDFOR;}
+"WHILE"                         {printf("WHILE "); return WHILE;}
+"ENDWHILE"                      {printf("ENDWHILE "); return ENDWHILE;}
+"SWITCH"                        {printf("SWITCH "); return SWITCH;}
+"CASE"                          {printf("CASE "); return CASE;}
+"DEFAULT"                       {printf("DEFAULT "); return DEFAULT;}
+"ENDSWITCH"                     {printf("ENDSWITCH "); return ENDSWITCH;}
+"PRINT"                         {printf("PRINT "); return PRINT;}
+"BREAK"                         {printf("BREAK "); return BREAK;}
+"STRUCT"                        {printf("STRUCT "); return STRUCT;}
+"ENDSTRUCT"                     {printf("ENDSTRUCT "); return ENDSTRUCT;}
+"TYPEDEF"                       {printf("TYPEDEF "); return TYPEDEF;}
 
+"{"                             {printf("LEFTCURL "); return LEFTCURL;}
+"}"                             {printf("RIGHTCURL "); return RIGHTCURL;}
+"["                             {printf("LEFTBRA "); return LEFTBRA;}
+"]"                             {printf("RIGHTBRA "); return RIGHTBRA;}
+"("                             {printf("LEFTPAR "); return LEFTPAR;}
+")"                             {printf("RIGHTPAR "); return RIGHTPAR;}
+","                             {printf("COMMA "); return COMMA;}
+";"                             {printf("SEMICOLON "); return SEMICOLON;}
+":"                             {printf("COLON "); return COLON;}
+"="                             {printf("ASSIGN "); return ASSIGN;}
+["]                             {printf("QUOTES "); return QUOTES;}
+\n                              {printf("\n"); return NEWLINE;}
+"/*"                            {printf("STARTCOM "); return STARTCOM;}
+"*/"                            {printf("ENDCOM "); return ENDCOM;}
 
-
-
-"{"                             {return LEFTCURL;}
-"}"                            {return RIGHTCURL;}
-"["                           {return LEFTBRA;}
-"]"                           {return RIGHTBRA;}
-"("                             {return LEFTPAR;}
-")"                             {return RIGHTPAR;}
-","                             {return COMMA;}
-";"                             {return SEMICOLON;}
-":"                             {return COLON;}
-"="                             {return ASSIGN;}
-["]                             {return QUOTES;}
-[\n]                           {return NEWLINE;}
-"/*"                          {return STARTCOM;}
-"*/"                          {return ENDCOM;}
-
-
-
-[a-zA-Z]                        {return CHARACTER;}
-[a-zA-Z][_a-zA-Z0-9]+	          {return ID;}
-[1-9][0-9]+				              {return INT;}
-[+|-|*|/]                          {return BINOP;}
-['=='|'!='|'<='|'>='|'<'|'>']   {return RELOP;}
-['&&'|'||']                     {return LOGICALOP;}
-"%"                             {return COMMENT;}
-['ch']+                         {return STRING;} 
-.					                      {printf("unexpected character\n");}
+[a-zA-Z]                        {printf("CHARACTER "); return CHARACTER;}
+[a-zA-Z][_a-zA-Z0-9]+	          {printf("ID "); return ID;}
+[1-9][0-9]+				              {printf("INT "); return INT;}
+[+|-|*|/]                       {printf("BINOP "); return BINOP;}
+['=='|'!='|'<='|'>='|'<'|'>']   {printf("RELOP "); return RELOP;}
+['&&'|'||']                     {printf("LOGICALOP "); return LOGICALOP;}
+"%"                             {printf("COMMENT "); return COMMENT;}
+['ch']+                         {printf("STRING "); return STRING;} 
+.					                      {printf("Unexpected character\n");}
 
 %%
 
