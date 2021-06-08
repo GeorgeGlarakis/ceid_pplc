@@ -1,10 +1,20 @@
 PROGRAM pplc
 
+STRUCT check( INTEGER c)
+
+	WHILE (c!=5) 
+		f = 8;
+		t = 7;
+	EMDWHILE
+
+ENDSTRUCT
+
+
 FUNCTION func (INTEGER d)
 
 	WHILE (g!=y) 
 		d = !h;
-		j = -4;
+		j = 4;
 	ENDWHILE
 
 
