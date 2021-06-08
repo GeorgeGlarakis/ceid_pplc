@@ -13,8 +13,7 @@
 
 %%
 
-[ \t]	  				                {;}
-\n                              {printf("new_line "); return NLINE;}
+[ \t\n]	  				                {;}
 "PROGRAM"                       {printf("PROGRAM "); return PROGRAM;}
 "FUNCTION"                      {printf("FUNCTION "); return FUNCTION;}
 "VARS"                          {printf("VARS "); return VARS;}

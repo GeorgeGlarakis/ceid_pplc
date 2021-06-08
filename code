@@ -1,12 +1,7 @@
 PROGRAM pplc
 
-STRUCT check( INTEGER c)
-
-	WHILE (c!=5) 
-		f = 8;
-		t = 7;
-	EMDWHILE
-
+STRUCT check
+	VARS INTEGER c;
 ENDSTRUCT
 
 
